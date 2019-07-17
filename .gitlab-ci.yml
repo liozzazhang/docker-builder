@@ -1,0 +1,152 @@
+stages:
+  - basic check
+  - build
+  - selfcheck
+  - review
+  - clean
+  - deploy
+before_script:
+  - source makefile.d/config
+
+.import_build_config:
+  script:
+  - &env_definition
+    |
+    IFS='-' read -r -a array <<< "${deploy_target}"
+    os=${array[0]}
+    type=${array[1]}
+    name=${array[2]}
+    version=${array[3]}
+
+check-image-name:
+  stage: basic check
+  script:
+  - *env_definition
+  - make check-image-name os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+check-image-type:
+  stage: basic check
+  script:
+  - *env_definition
+  - make check-image-type os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+check-build-path:
+  stage: basic check
+  script:
+  - *env_definition
+  - make check-build-path os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+check-dockerfile:
+  stage: basic check
+  script:
+  - *env_definition
+  - make check-dockerfile os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+  allow_failure: true
+
+build:
+  stage: build
+  script:
+  - *env_definition
+  - make build os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+
+image-check:
+  stage: selfcheck
+  script:
+  - *env_definition
+  - make image-check os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+docker-bench:
+  stage: selfcheck
+  script:
+  - *env_definition
+  - make docker-bench os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+
+code-review:
+  stage: review
+  script:
+  - *env_definition
+  - make autoscope os=${os} type=${type} version=${version} name=${name}
+  - git show $CI_COMMIT_SHA
+  - echo "this is image review"
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    url: http://review.$CI_BUILD_REF_SLUG.local
+    on_stop: stop_code_review
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+stop_code_review:
+  stage: review
+  script:
+  - *env_definition
+  - make rollback os=${os} type=${type} version=${version} name=${name}
+  - echo "revert code"
+  variables:
+    GIT_STRATEGY: none
+  when: manual
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    action: stop
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+rollback:
+  stage: clean
+  script:
+  - *env_definition
+  - make rollback os=${os} type=${type} version=${version}  name=${name}
+  when: manual
+  only:
+    - branches
+  except:
+    - /.*/@devops/containers
+
+push:
+  stage: deploy
+  script:
+  - *env_definition
+  - make push os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - master@devops/containers
+
+register:
+  stage: deploy
+  script:
+  - *env_definition
+  - make register os=${os} type=${type} version=${version}  name=${name}
+  only:
+    - master@devops/containers

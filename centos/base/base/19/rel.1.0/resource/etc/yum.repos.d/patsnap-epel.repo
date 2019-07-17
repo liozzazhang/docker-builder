@@ -1,0 +1,26 @@
+# example-Epel.repo
+#
+[example-epel]
+name=Extra Packages for Enterprise Linux 7 - $basearch
+baseurl=http://yum.repo.example.com/yum/CentOS_7/epel/
+failovermethod=priority
+enabled=1
+gpgcheck=1
+gpgkey=http://yum.repo.example.com/yum/CentOS_7/RPM-GPG-KEY-CentOS-7
+
+[example-epel-debuginfo]
+name=Extra Packages for Enterprise Linux 7 - $basearch - Debug
+baseurl=http://yum.repo.example.com/yum/CentOS_7/epel-debuginfo/
+failovermethod=priority
+enabled=1
+gpgkey=http://yum.repo.example.com/yum/CentOS_7/RPM-GPG-KEY-CentOS-7
+gpgcheck=1
+
+[example-epel-source]
+name=Extra Packages for Enterprise Linux 7 - $basearch - Source
+baseurl=http://yum.repo.example.com/yum/CentOS_7/epel-source/
+failovermethod=priority
+enabled=1
+gpgkey=http://yum.repo.example.com/yum/CentOS_7/RPM-GPG-KEY-CentOS-7
+gpgcheck=1
+

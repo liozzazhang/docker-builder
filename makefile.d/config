@@ -1,0 +1,13 @@
+# source code branch name
+BUILD_SOURCE_BRANCH=rel
+# project version
+BUILD_PROJECT_VERSION=1
+# source code revision number
+BUILD_SOURCE_REVISION=0
+# jenkins job build number
+BUILD_JOB_NUMBER=1
+
+##### ##### ##### build image name #####  ##### ##### #####
+##### #####  deploy_target=os-type-name-version ##### #####
+##### ##### ##### ##### ##### ##### ##### ##### ##### #####
+deploy_target=centos-base-base-18

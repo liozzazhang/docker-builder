@@ -1,0 +1,6 @@
+########## environments ##########
+
+# ops environment
+DEPLOY_TARGET_URI=course/cn-north-1/release/website
+REPO=
+

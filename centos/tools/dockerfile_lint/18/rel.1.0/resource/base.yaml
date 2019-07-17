@@ -1,0 +1,82 @@
+---
+profile:
+    name: "Basic Rule"
+    description: "Basic Profile. Checks basic syntax."
+    includes:
+      - from_rules.yaml
+      - label_rules.yaml
+      - run_rules.yaml
+line_rules:
+  MAINTAINER:
+    paramSyntaxRegex: /.+/
+    rules:
+      -
+        label: "is_email_format"
+        regex: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
+        level: "info"
+        inverse_rule: true
+        message: "maintainer should contains an email address"
+        description: "It is recommended that an email address is included in MAINTAINER line"
+  ADD:
+    paramSyntaxRegex: /.+/
+    rules:
+      -
+        label: "is_add_used"
+        regex: /.+/
+        level: "warn"
+        message: "ADD is used in Dockerfile"
+        description: "It is recommended that use 'COPY' instead of 'ADD'"
+  EXPOSE:
+      paramSyntaxRegex: /^[\d-\s\w/\\]+$/
+      rules: []
+  ENV:
+    paramSyntaxRegex: /^[\w-$/\\=\"[\]{}@:,'`\t. ]+$/
+    rules: []
+  ADD:
+    paramSyntaxRegex: /^~?([\w-.~:/?#\[\]\\\/*@!$&'()*+,;=.{}"]+[\s]*)+$/
+  COPY:
+    paramSyntaxRegex: /.+/
+    rules: []
+  ENTRYPOINT:
+    paramSyntaxRegex: /.+/
+    rules: []
+  VOLUME:
+    paramSyntaxRegex: /.+/
+    rules: []
+  USER:
+    paramSyntaxRegex: /^[a-z0-9_][a-z0-9_]{0,30}$/
+    rules: []
+  WORKDIR:
+    paramSyntaxRegex: /^~?[\w\d-\/.{}$\/:]+[\s]*$/
+    rules: []
+  ONBUILD:
+    paramSyntaxRegex: /.+/
+    rules: []
+required_instructions:
+    -
+      instruction: "EXPOSE"
+      count: 1
+      level: "info"
+      message: "There is no 'EXPOSE' instruction"
+      description: "Without exposed ports how will the service excluding buildenv and base images of the container be accessed?"
+      reference_url:
+        - "https://docs.docker.com/engine/reference/builder/"
+        - "#expose"
+    -
+      instruction: "ENTRYPOINT"
+      count: 1
+      level: "info"
+      message: "There is no 'ENTRYPOINT' instruction"
+      description: "None"
+      reference_url:
+        - "https://docs.docker.com/engine/reference/builder/"
+        - "#entrypoint"
+    -
+      instruction: "USER"
+      count: 1
+      level: "warn"
+      message: "No 'USER' instruction"
+      description: "The process(es) within the container may run as root and RUN instructions my be run as root"
+      reference_url:
+        - "https://docs.docker.com/engine/reference/builder/"
+        - "#user"

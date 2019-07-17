@@ -1,0 +1,8 @@
+example-base:
+  image: dtr.example.com/base/base18:rel.1.0.0
+  volumes:
+   - /tmp/logs:/opt/logs
+   - ~/.aws/:/root/.aws
+  env_file: env
+  restart: always
+  container_name: base18

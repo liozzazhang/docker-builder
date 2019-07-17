@@ -1,0 +1,27 @@
+# example-Base.repo
+#
+[example-base]
+name=CentOS-$releasever - Base
+baseurl=http://yum.repo.example.com/yum/CentOS_7/base/
+gpgcheck=1
+gpgkey=http://yum.repo.example.com/yum/CentOS_7/RPM-GPG-KEY-CentOS-7
+
+[example-updates]
+enable=1
+name=CentOS-$releasever - Updates
+baseurl=http://yum.repo.example.com/yum/CentOS_7/updates
+gpgcheck=1
+gpgkey=http://yum.repo.example.com/yum/CentOS_7/RPM-GPG-KEY-CentOS-7
+
+[example-extras]
+name=CentOS-$releasever - Extras
+baseurl=http://yum.repo.example.com/yum/CentOS_7/extras
+gpgcheck=1
+gpgkey=http://yum.repo.example.com/yum/CentOS_7/RPM-GPG-KEY-CentOS-7
+
+[example-centosplus]
+name=CentOS-$releasever - Plus
+baseurl=http://yum.repo.example.com/yum/CentOS_7/centosplus
+gpgcheck=1
+enable=1
+gpgkey=http://yum.repo.example.com/yum/CentOS_7/RPM-GPG-KEY-CentOS-7

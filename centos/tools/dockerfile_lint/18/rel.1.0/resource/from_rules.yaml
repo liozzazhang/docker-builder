@@ -1,0 +1,37 @@
+---
+profile:
+  description: "FROM checking rule file."
+  name: From
+line_rules:
+  FROM:
+    paramSyntaxRegex: /.+/
+    rules:
+      -
+        label: "is_latest_tag"
+        regex: /latest/
+        level: "error"
+        message: "base image uses 'latest' tag"
+        description: "using the 'latest' tag may cause unpredictable builds. It is recommended that a specific tag is used in the FROM line."
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+      -
+        label: "is_sha256_tag"
+        regex: /sha256/
+        level: "error"
+        inverse_rule: true
+        message: "No 'sha256' tag is used"
+        description: "not using the 'sha256' tag may cause insecure builds. It is recommended that a 'sha256' tag is used in the FROM line."
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+      -
+        label: "no_tag"
+        regex: /[:]/
+        level: "warn"
+        inverse_rule: true
+        message: "No tag is used"
+        description: "No tag is used"
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"

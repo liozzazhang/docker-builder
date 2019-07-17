@@ -1,0 +1,91 @@
+---
+profile:
+  description: "Label checking rule file."
+  name: Label
+line_rules:
+  LABEL:
+    paramSyntaxRegex: /.+/
+    defined_namevals:
+      Authoritative_Registry:
+        level: error
+        message: "Label 'Authoritative_Registry' has invalid format"
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+        required: true
+        valueRegex: /.+/
+      BZComponent:
+        level: error
+        message: "Label 'BZComponent' has invalid format"
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+        required: recommended
+        valueRegex: /^\d+$/
+      Created_TimeStamp:
+        level: error
+        message: "Label 'Created_TimeStamp' has invalid format"
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+        required: recommended
+        valueRegex: /.+/
+      Vendor:
+        level: error
+        message: "Label 'Vendor' has invalid format"
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+        required: false
+        valueRegex: /.+/
+      VendorID:
+        level: error
+        message: "Label 'Vendor ID' is has invalid format"
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+        required: true
+        valueRegex: /^\d+$/
+    nameval_defaults:
+      keyRegex: /.+/
+      level: error
+      name_error_message: "The key of the label has the wrong format"
+      reference_url:
+        - "https://docs.docker.com/engine/reference/builder/"
+        - "#from"
+      valueRegex: /.+/
+      value_error_message: "The value of the label has the wrong format"
+  LABEL:
+    paramSyntaxRegex: /.+/
+    rules:
+      -
+        label: "source_image_info_specified"
+        regex: /(source.image.\b(name|tag|sha256)\b.*){3}/
+        level: "warn"
+        inverse_rule: true
+        message: "Source image is not complete"
+        description: "Source image info should contains name|tag|sha256"
+      -
+        label: "build_image_info_specified"
+        regex: /(build.image.\b(name|version)\b.*){2}/
+        level: "warn"
+        inverse_rule: true
+        message: "Build image is not complete"
+        description: "Build image info should contains name|version"
+      -
+        label: "description_specified"
+        regex: /\bdescription\b/
+        level: "warn"
+        inverse_rule: true
+        message: "description section is missing"
+        description: "It is recommended that a 'description' section is used in the LABEL line"
+required_instructions:
+  -
+    count: 1
+    description: "Labels are needed because...."
+    instruction: LABEL
+    level: error
+    message: "No LABELs are defined"
+    reference_url:
+      - "https://docs.docker.com/engine/reference/builder/"
+      - "#label"
